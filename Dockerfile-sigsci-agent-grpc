@@ -1,0 +1,15 @@
+# Dockerfile example for debian Signal Sciences reverse proxy agent container
+
+FROM ubuntu:xenial
+MAINTAINER Signal Sciences Corp.
+
+COPY sigsci-release.list /etc/apt/sources.list.d/sigsci-release.list
+RUN  apt-get update; apt-get install -y apt-transport-https curl ; curl -slL https://apt.signalsciences.net/gpg.key | apt-key add -; apt-get update; apt-get install -y sigsci-agent;  apt-get clean
+
+COPY start.sh /opt/start.sh
+RUN  chmod +x /opt/start.sh
+
+RUN mkdir /etc/sigsci
+COPY agent.conf /etc/sigsci/agent.conf
+
+CMD ["/opt/start.sh"]
