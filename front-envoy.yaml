@@ -59,7 +59,7 @@ static_resources:
     type: strict_dns
     lb_policy: round_robin
     http2_protocol_options: {}
-    tls_context: {}
+    #tls_context: {}
     hosts:
     - socket_address:
         address: sigsci-agent-grpc
