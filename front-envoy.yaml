@@ -26,6 +26,21 @@ static_resources:
                 route:
                   cluster: service2
           http_filters:
+          - name: envoy.lua
+            config:
+              inline_code: |
+                -- Add an internal :body header to pass the body if <= 8KB
+                function envoy_on_request(req)
+                  len = 0
+                  cl = req:headers():get("content-length")
+                  if cl ~= nil then
+                    len = tonumber(cl)
+                  end
+                  if len > 0 and len <= 8192 then
+                    reqbody = req:body():getBytes(0, len)
+                    req:headers():add(":body", reqbody)
+                  end
+                end          
           - name: envoy.ext_authz
             config:
               grpc_service:
