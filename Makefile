@@ -3,6 +3,9 @@ AGENT_SCALE = 1
 #SigSci agent 3.15.1 clusters should only have one cluster container
 #AGENT_SCALE = 3
 
+build:
+        docker-compose up --build -d --no-cache sigsci-agent
+
 start:
 	docker-compose up -d --scale sigsci-agent=$(AGENT_SCALE)
 	@echo
