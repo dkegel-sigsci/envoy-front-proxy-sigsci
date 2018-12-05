@@ -2,6 +2,8 @@ To learn about this sandbox and for instructions on how to run it please head ov
 to the [envoy docs](https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/front_proxy.html)
 # envoy-front-proxy-sigsci
 
+You must edit agent.conf and add your own SigSci accesskeyid and secretaccesskey values.
+
 The contained Makefile contains some common tasks.
 
 ## Build containers with no cache option for the SigSci agent containers
