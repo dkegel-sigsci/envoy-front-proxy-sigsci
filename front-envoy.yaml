@@ -25,6 +25,30 @@ static_resources:
                   prefix: "/service/2"
                 route:
                   cluster: service2
+          #the access_log section below is not needed if using SigSci agent 3.15.0        
+          access_log:
+          - name: envoy.http_grpc_access_log
+            config:
+              common_config:
+                log_name: "sigsci-agent-grpc"
+                grpc_service:
+                  envoy_grpc:
+                    cluster_name: sigsci-agent-grpc1
+                  timeout: 0.2s
+              additional_request_headers_to_log:
+              # These are required:
+              - "x-sigsci-request-id"
+              - "x-sigsci-waf-response"
+              # These are additional you want recorded:
+              - "accept"
+              - "content-type"
+              - "content-length"
+              additional_response_headers_to_log:
+              # These are additional you want recorded:
+              - "date"
+              - "server"
+              - "content-type"
+              - "content-length"       
           http_filters:
           - name: envoy.lua
             config:
