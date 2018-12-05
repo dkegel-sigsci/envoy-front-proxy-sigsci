@@ -6,6 +6,10 @@ MAINTAINER Signal Sciences Corp.
 COPY sigsci-release.list /etc/apt/sources.list.d/sigsci-release.list
 RUN  apt-get update; apt-get install -y apt-transport-https curl ; curl -slL https://apt.signalsciences.net/gpg.key | apt-key add -; apt-get update; apt-get install -y sigsci-agent;  apt-get clean
 
+#Load agent version 3.15.0
+#comment out RUN line above if this version is to be used
+#RUN  apt-get update; apt-get install -y apt-transport-https curl ; curl -slL https://apt.signalsciences.net/gpg.key | apt-key add -; apt-get update; apt-get install -y sigsci-agent=3.15.0~xenial;  apt-get clean
+
 COPY start.sh /opt/start.sh
 RUN  chmod +x /opt/start.sh
 
