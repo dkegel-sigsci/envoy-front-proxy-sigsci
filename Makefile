@@ -4,7 +4,7 @@ AGENT_SCALE = 1
 #AGENT_SCALE = 3
 
 build:
-        docker-compose up --build -d --no-cache sigsci-agent
+        docker-compose build
 
 start:
 	docker-compose up -d --scale sigsci-agent=$(AGENT_SCALE)
