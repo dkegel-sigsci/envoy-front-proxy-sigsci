@@ -6,6 +6,9 @@ You must edit agent.conf and add your own SigSci accesskeyid and secretaccesskey
 
 The contained Makefile contains some common tasks.
 
+You can choose which versions of sigsci agent and envoy are used
+by editing Makefile to uncomment the desired versions.
+
 ## Build containers with no cache option for the SigSci agent containers
 make build
 
@@ -17,3 +20,9 @@ make stop
 
 ## Display all container stdout logs
 make log
+
+## Run smoke test
+make test
+
+## Clean up thoroughly
+make clean
