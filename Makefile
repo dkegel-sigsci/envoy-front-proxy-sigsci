@@ -4,13 +4,15 @@
 #
 ## Known bad combinations:
 ## 2021 Jan
-#SIGSCI=4.15.0
-#ENVOY=v1.17.0
-
-## Known good combinations:
-## 2020 Dec
 SIGSCI=4.15.0
-ENVOY=v1.16.2
+ENVOY=v1.17.0
+# https://www.envoyproxy.io/docs/envoy/latest/faq/api/transition
+ENVOYARGS=--bootstrap-version 2
+
+## Combinations that pass the "make check" smoke test:
+## 2020 Dec
+#SIGSCI=4.15.0
+#ENVOY=v1.16.2
 ## 2020 Jun 25
 #SIGSCI=4.10.0
 #ENVOY=v1.13.3
@@ -60,7 +62,7 @@ AGENT_SCALE = 1
 #AGENT_SCALE = 3
 
 build:
-	docker-compose build --build-arg ENVOY=$(ENVOY) --build-arg SIGSCI=$(SIGSCI)
+	docker-compose build --build-arg ENVOY=$(ENVOY) --build-arg SIGSCI=$(SIGSCI) --build-arg ENVOYARGS="$(ENVOYARGS)"
 
 start:
 	docker-compose up -d --scale sigsci-agent=$(AGENT_SCALE)
