@@ -3,4 +3,6 @@ FROM envoyproxy/envoy:$ENVOY
 
 RUN apt-get update && apt-get -q install -y \
     curl
-CMD /usr/local/bin/envoy -c /etc/front-envoy.yaml --service-cluster front-proxy
+ARG ENVOYARGS
+ENV ENVOYARGS $ENVOYARGS
+CMD echo "Starting envoy with extra args '$ENVOYARGS'"; /usr/local/bin/envoy -c /etc/front-envoy.yaml --service-cluster front-proxy $ENVOYARGS

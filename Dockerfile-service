@@ -8,4 +8,6 @@ RUN mkdir /code
 ADD ./service.py /code
 ADD ./start_service.sh /usr/local/bin/start_service.sh
 RUN chmod u+x /usr/local/bin/start_service.sh
-ENTRYPOINT /usr/local/bin/start_service.sh
+ARG ENVOYARGS
+ENV ENVOYARGS $ENVOYARGS
+ENTRYPOINT /usr/local/bin/start_service.sh $ENVOYARGS

@@ -2,15 +2,18 @@
 # For Sigsci, pick from https://docs.signalsciences.net/release/agent/
 # For Envoy, pick from https://hub.docker.com/r/envoyproxy/envoy-alpine/tags
 #
-## Known bad combinations:
+## Combinations that pass the "make check" smoke test:
 ## 2021 Jan
-#SIGSCI=4.15.0
-#ENVOY=v1.17.0
-
-## Known good combinations:
-## 2020 Dec
+# Envoy 1.17 disabled the v2 api used by the demo.
+# To get this to work properly, we'll need to update the yaml and the agent.
+# Until then, we can force v2 back on temporarily by passing --bootstrap-version 2, per
+# https://www.envoyproxy.io/docs/envoy/latest/faq/api/transition
 SIGSCI=4.15.0
-ENVOY=v1.16.2
+ENVOY=v1.17.0
+ENVOYARGS=--bootstrap-version 2
+## 2020 Dec
+#SIGSCI=4.15.0
+#ENVOY=v1.16.2
 ## 2020 Jun 25
 #SIGSCI=4.10.0
 #ENVOY=v1.13.3
@@ -60,7 +63,7 @@ AGENT_SCALE = 1
 #AGENT_SCALE = 3
 
 build:
-	docker-compose build --build-arg ENVOY=$(ENVOY) --build-arg SIGSCI=$(SIGSCI)
+	docker-compose build --build-arg ENVOY=$(ENVOY) --build-arg SIGSCI=$(SIGSCI) --build-arg ENVOYARGS="$(ENVOYARGS)"
 
 start:
 	docker-compose up -d --scale sigsci-agent=$(AGENT_SCALE)
