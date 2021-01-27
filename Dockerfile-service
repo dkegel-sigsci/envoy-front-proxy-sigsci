@@ -1,6 +1,7 @@
-FROM envoyproxy/envoy-alpine:latest
+ARG ENVOY
+FROM envoyproxy/envoy-alpine:$ENVOY
 
-RUN apk update && apk add python3 bash
+RUN apk update && apk add python3 py-pip bash
 RUN python3 --version && pip3 --version
 RUN pip3 install -q Flask==0.11.1 requests==2.18.4
 RUN mkdir /code
