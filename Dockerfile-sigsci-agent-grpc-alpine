@@ -1,0 +1,6 @@
+# Same as Dockerfile-sigsci-agent-grpc, but using sigsci's preconfigured Alpine linux container.
+FROM signalsciences/sigsci-agent:latest
+#FROM sigsci-agent-dev
+USER root
+RUN mkdir /etc/sigsci
+COPY agent.conf /etc/sigsci/agent.conf

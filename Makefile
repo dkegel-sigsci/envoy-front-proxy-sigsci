@@ -1,16 +1,27 @@
 # Which versions of sigsci-agent and Envoy to use
 # For Sigsci, pick from https://docs.signalsciences.net/release/agent/
 # For Envoy, pick from https://hub.docker.com/r/envoyproxy/envoy-alpine/tags
-#
-## Combinations that pass the "make check" smoke test:
+# Leave all but the combination of interest commented out
+
+#---------- Envoy V3 ---------
+# Envoy 1.17 and up use the v3 api, so give it the -v3.yaml example files.
 ## 2021 Jan
-# Envoy 1.17 disabled the v2 api used by the demo.
-# To get this to work properly, we'll need to update the yaml and the agent.
-# Until then, we can force v2 back on temporarily by passing --bootstrap-version 2, per
-# https://www.envoyproxy.io/docs/envoy/latest/faq/api/transition
-SIGSCI=4.15.0
+ENVOYARGS=
+APISUFFIX=-v3
+SIGSCI=4.16.0
 ENVOY=v1.17.0
-ENVOYARGS=--bootstrap-version 2
+
+#---------- Envoy V2, forced ---------
+# Envoy 1.17 and up disable the V2 api; to use it anyway, run with --bootstrap-version 2, see https://www.envoyproxy.io/docs/envoy/latest/faq/api/transition
+
+## 2021 Jan
+#ENVOYARGS=--bootstrap-version 2
+#APISUFFIX=
+#SIGSCI=4.15.0
+#ENVOY=v1.17.0
+
+#---------- Envoy V2 ---------
+# Leave ENVOYARGS and APISUFFIX blank for V2
 ## 2020 Dec
 #SIGSCI=4.15.0
 #ENVOY=v1.16.2
@@ -62,6 +73,9 @@ AGENT_SCALE = 1
 #SigSci agent 3.15.1 clusters should only have one cluster container
 #AGENT_SCALE = 3
 
+# pass environment variable to docker-compose
+export APISUFFIX
+
 build:
 	docker-compose build --build-arg ENVOY=$(ENVOY) --build-arg SIGSCI=$(SIGSCI) --build-arg ENVOYARGS="$(ENVOYARGS)"
 
@@ -80,6 +94,7 @@ log:
 
 check: test
 test:
+	if docker-compose ps | grep Exit; then echo 'Something broke!'; exit 1; fi
 	@echo "Example fetch from service 1"
 	curl -v localhost:8000/service/1
 	@echo "Example fetch from service 2"
