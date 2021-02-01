@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile-frontenvoy
     volumes:
-      - ./front-envoy.yaml:/etc/front-envoy.yaml
+      - ./front-envoy${APISUFFIX}.yaml:/etc/front-envoy.yaml
     networks:
       - envoymesh
     expose:
@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile-service
     volumes:
-      - ./service-envoy.yaml:/etc/service-envoy.yaml
+      - ./service-envoy${APISUFFIX}.yaml:/etc/service-envoy.yaml
     networks:
       envoymesh:
         aliases:
@@ -36,7 +36,7 @@ services:
       context: .
       dockerfile: Dockerfile-service
     volumes:
-      - ./service-envoy.yaml:/etc/service-envoy.yaml
+      - ./service-envoy${APISUFFIX}.yaml:/etc/service-envoy.yaml
     networks:
       envoymesh:
         aliases:
@@ -48,7 +48,8 @@ services:
   sigsci-agent:
     build:
       context: .
-      dockerfile: Dockerfile-sigsci-agent-grpc
+      #dockerfile: Dockerfile-sigsci-agent-grpc   # if you prefer ubuntu
+      dockerfile: Dockerfile-sigsci-agent-grpc-alpine
     networks:
       envoymesh:
         aliases:
