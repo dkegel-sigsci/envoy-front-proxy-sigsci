@@ -1,8 +1,20 @@
 ARG ENVOY
-FROM envoyproxy/envoy:$ENVOY
+FROM tinygo/tinygo:0.16.0
 
+# begin workaround
+# tinygo cannot yet fetch dependencies, so do it with regular go?
+RUN apt-get update && apt-get install -y git
+# proxywasm will fail to build with go, but that is ok, the sources are all we need.
+RUN go get github.com/tetratelabs/proxy-wasm-go-sdk/proxywasm || true
+# end workaround
+
+COPY wasmfilter.go .
+RUN /usr/local/tinygo/bin/tinygo build -o ./wasmfilter.wasm -scheduler=none -target=wasi ./wasmfilter.go
+
+FROM envoyproxy/envoy:$ENVOY
 RUN apt-get update && apt-get -q install -y \
     curl
 ARG ENVOYARGS
 ENV ENVOYARGS $ENVOYARGS
+COPY --from=0 wasmfilter.wasm /etc
 CMD echo "Starting envoy with extra args '$ENVOYARGS'"; /usr/local/bin/envoy -c /etc/front-envoy.yaml --service-cluster front-proxy $ENVOYARGS

@@ -87,6 +87,21 @@ static_resources:
                   cluster_name: sigsci-agent-grpc1
                 timeout: 5.2s
               failure_mode_allow: true
+          - name: envoy.filters.http.wasm
+            typed_config:
+              "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+              type_url: type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm
+              value:
+                config:
+                  name: "my_plugin"
+                  root_id: "my_root_id"
+                  vm_config:
+                    vm_id: "my_vm_id"
+                    runtime: "envoy.wasm.runtime.v8"
+                    code:
+                      local:
+                        filename: "/etc/wasmfilter.wasm"
+                    allow_precompiled: true
           ## end sigsci part 2 ##
           - name: envoy.filters.http.router
             typed_config: {}
