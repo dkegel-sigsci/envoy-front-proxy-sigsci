@@ -99,6 +99,9 @@ test:
 	curl -v localhost:8000/service/1
 	@echo "Example fetch from service 2"
 	curl -v localhost:8000/service/2
+	@echo "Example POST to service 1, just to trigger logging in wasmfilter"
+	curl -v -d "param1=value1" localhost:8000/service/1 || true
+	docker-compose logs | grep WASM
 
 clean: stop
 	docker system prune
