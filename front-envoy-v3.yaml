@@ -98,6 +98,7 @@ static_resources:
                   vm_config:
                     vm_id: "my_vm_id"
                     runtime: "envoy.wasm.runtime.v8"
+                    #runtime: "envoy.wasm.runtime.wasmtime"
                     code:
                       local:
                         filename: "/etc/wasmfilter.wasm"

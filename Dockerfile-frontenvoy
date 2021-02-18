@@ -17,4 +17,5 @@ RUN apt-get update && apt-get -q install -y \
 ARG ENVOYARGS
 ENV ENVOYARGS $ENVOYARGS
 COPY --from=0 wasmfilter.wasm /etc
+#COPY envoy-wasmtime /usr/local/bin/envoy
 CMD echo "Starting envoy with extra args '$ENVOYARGS'"; /usr/local/bin/envoy -c /etc/front-envoy.yaml --service-cluster front-proxy $ENVOYARGS

@@ -48,3 +48,14 @@ Dockerfile-frontenvoy runs envoy with front-envoy.yaml, which:
 - has an ingress listener on its port 80, and routes /service/1 and /service/2 to port 80 of the two instances of service.
 
 docker-compose.yml listens on your workstation's port 8000 and forwards that to the ingress listener's port 80.
+
+If you want to use wasm filters, and envoy's wasmtime runtime instead of its stock wavm runtime,
+you will need to build envoy yourself, e.g.
+```
+git clone https://github.com/envoyproxy/envoy ../envoy
+cd ../envoy
+./ci/run_envoy_docker.sh 'BAZEL_BUILD_EXTRA_OPTIONS="--define=wasm=wasmtime" ci/do_ci.sh bazel.dev //test/... --test_env=ENVOY_IP_TEST_VERSIONS=v4only'
+cd -
+cp ../envoy/src/envoy/linux/amd64/build_fastbuild/envoy envoy-wasmtime
+```
+and then uncomment the references to wasmtime in Dockerfile-frontproxy and front-envoy-v3.yaml before running ```make clean && make build```.
